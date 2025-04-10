@@ -1,4 +1,4 @@
-package org.sopt.common;
+package org.sopt.common.utils;
 
 import org.sopt.damain.api.exception.TitleDuplicateException;
 import org.sopt.damain.api.exception.TitleEmptyException;

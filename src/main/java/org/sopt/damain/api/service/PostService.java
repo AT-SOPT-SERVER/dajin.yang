@@ -1,22 +1,19 @@
 package org.sopt.damain.api.service;
 
-import org.sopt.common.TitleValidate;
 import org.sopt.damain.core.Post;
 import org.sopt.damain.core.repository.PostRepository;
 
 import java.util.List;
 
-import static org.sopt.common.TitleValidate.duplicate;
-
-
+import static org.sopt.common.utils.TitleValidate.duplicate;
+import static org.sopt.common.utils.IdGenerator.generateId;
 public class PostService {
     PostRepository postRepository =new PostRepository();
 
-    public void createPost(Post post) {
-        duplicate(post.getTitle(), postRepository.findAll());
-        int id = postRepository.findAll().size() + 1;
-        Post p = new Post(id, post.getTitle());
-        postRepository.save(p);
+    public void createPost(String title) {
+        duplicate(title, postRepository.findAll());
+        Post post = new Post(generateId(), title);
+        postRepository.save(post);
     }
 
     public List<Post> getAllPosts() {
