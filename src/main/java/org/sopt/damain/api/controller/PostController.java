@@ -1,5 +1,6 @@
 package org.sopt.damain.api.controller;
 
+import org.sopt.damain.api.GlobalExceptionHandler;
 import org.sopt.damain.core.Post;
 import org.sopt.damain.api.service.PostService;
 import org.sopt.exception.BusinessException;
@@ -29,10 +30,12 @@ public class PostController {
     }
 
     public boolean updatePostTitle(int id, String title) {
+        Post post = new Post(id, title);
         try {
-            postService.updatePostTitle(id, title);
+            postService.updatePostTitle(post);
             return true;
-        } catch (BusinessException exception) {
+        } catch (BusinessException ex) {
+            GlobalExceptionHandler.handler(ex);
             return false;
         }
     }

@@ -1,5 +1,6 @@
 package org.sopt.damain.api.service;
 
+import org.sopt.common.TitleValidate;
 import org.sopt.damain.core.Post;
 import org.sopt.damain.core.repository.PostRepository;
 
@@ -11,7 +12,10 @@ public class PostService {
     PostRepository postRepository =new PostRepository();
 
     public void createPost(Post post) {
-        postRepository.save(post);
+        validate(post.getTitle(), postRepository.findAll());
+        int id = postRepository.findAll().size() + 1;
+        Post p = new Post(id, post.getTitle());
+        postRepository.save(p);
     }
 
     public List<Post> getAllPosts() {
@@ -25,8 +29,8 @@ public class PostService {
         return postRepository.delete(id);
     }
 
-    public void updatePostTitle(int id, String title) {
-        validate(title, postRepository.findAll());
-        postRepository.updateTitle(id, title);
+    public void updatePostTitle(Post post) {
+        validate(post.getTitle(), postRepository.findAll());
+        postRepository.updateTitle(post.getId(), post.getTitle());
     }
 }
