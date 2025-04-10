@@ -1,10 +1,21 @@
 package org.sopt.damain.core;
 
+import org.sopt.damain.api.exception.TitleEmptyException;
+import org.sopt.damain.api.exception.TitleLengthException;
+
 public class Post {
     private int id;
     private String title;
 
     public Post(int id, String title) {
+        if (title == null || title.isBlank()) {
+            throw new TitleEmptyException();
+        }
+
+        if (title.length() > 30) {
+            throw new TitleLengthException();
+        }
+
         this.id = id;
         this.title = title;
     }
