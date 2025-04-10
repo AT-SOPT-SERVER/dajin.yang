@@ -1,5 +1,6 @@
 package org.sopt.damain.api.service;
 
+import org.sopt.common.FileManager;
 import org.sopt.damain.api.exception.TimeAttackException;
 import org.sopt.damain.core.Post;
 import org.sopt.damain.core.repository.PostRepository;
@@ -12,6 +13,12 @@ import static org.sopt.common.utils.TitleValidate.duplicate;
 import static org.sopt.common.utils.IdGenerator.generateId;
 public class PostService {
     PostRepository postRepository =new PostRepository();
+
+    public PostService() {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            saveFile();
+        }));
+    }
 
     public void createPost(String title) {
         duplicate(title, postRepository.findAll());
@@ -44,5 +51,14 @@ public class PostService {
 
     public List<Post> searchPostsByKeyword(String keyword) {
         return postRepository.searchByKeword(keyword);
+    }
+
+    public void saveFile() {
+        FileManager.saveFile(postRepository.findAll());
+    }
+
+    public void loadFile() {
+        List<Post> post = FileManager.loadFile();
+        postRepository.loadFile(post);
     }
 }

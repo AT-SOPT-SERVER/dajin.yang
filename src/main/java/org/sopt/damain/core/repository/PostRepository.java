@@ -2,7 +2,11 @@ package org.sopt.damain.core.repository;
 
 import org.sopt.damain.api.exception.NotFoundException;
 import org.sopt.damain.core.Post;
+import org.sopt.exception.BusinessException;
+import org.sopt.exception.ErrorCode;
 
+import java.io.BufferedWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -61,5 +65,25 @@ public class PostRepository {
             }
         }
         return result;
+    }
+
+    public void saveFile(String path) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
+            for (Post post : postList) {
+                writer.write(post.getId() + post.getTitle());
+                writer.newLine();
+            }
+        } catch (IOException ex) {
+            throw new BusinessException(ErrorCode.FILE_SAVE_ERROR);
+        }
+    }
+
+    public void loadFile(List<Post> posts) {
+        postList.clear();
+        postList.addAll(posts);
+    }
+
+    public void setPost(List<Post> posts) {
+        this.postList = posts;
     }
 }

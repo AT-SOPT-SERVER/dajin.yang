@@ -75,6 +75,7 @@ public class Main {
                         System.out.println("❌ 삭제할 게시글이 존재하지 않습니다.");
                     }
                     break;
+
                 case "6":
                     System.out.println("\n🔎 [게시글 검색]");
                     System.out.print("검색할 키워드를 입력해주세요: ");

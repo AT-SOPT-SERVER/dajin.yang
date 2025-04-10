@@ -41,4 +41,12 @@ public class PostController {
     public List<Post> searchPostsByKeyword(String keyword) {
         return postService.searchPostsByKeyword(keyword);
     }
+
+    public void saveFile() {
+        postService.saveFile();
+    }
+
+    public void loadFile() {
+        postService.loadFile();
+    }
 }
