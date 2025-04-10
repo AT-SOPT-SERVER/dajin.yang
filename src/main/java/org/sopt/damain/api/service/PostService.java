@@ -6,13 +6,14 @@ import org.sopt.damain.core.repository.PostRepository;
 
 import java.util.List;
 
-import static org.sopt.common.TitleValidate.validate;
+import static org.sopt.common.TitleValidate.duplicate;
+
 
 public class PostService {
     PostRepository postRepository =new PostRepository();
 
     public void createPost(Post post) {
-        validate(post.getTitle(), postRepository.findAll());
+        duplicate(post.getTitle(), postRepository.findAll());
         int id = postRepository.findAll().size() + 1;
         Post p = new Post(id, post.getTitle());
         postRepository.save(p);
@@ -30,7 +31,6 @@ public class PostService {
     }
 
     public void updatePostTitle(Post post) {
-        validate(post.getTitle(), postRepository.findAll());
         postRepository.updateTitle(post.getId(), post.getTitle());
     }
 }
