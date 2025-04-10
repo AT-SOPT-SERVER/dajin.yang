@@ -5,6 +5,7 @@ import org.sopt.damain.core.Post;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class PostRepository {
     List<Post> postList = new ArrayList<>();
@@ -43,5 +44,12 @@ public class PostRepository {
             throw new NotFoundException();
         }
         post.updateTitle(title);
+    }
+
+    public Optional<Post> createdAt() {
+        if (postList.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(postList.get(postList.size() - 1));
     }
 }
