@@ -1,7 +1,8 @@
-package org.sopt.controller;
+package org.sopt.damain.api.controller;
 
-import org.sopt.damain.Post;
-import org.sopt.service.PostService;
+import org.sopt.damain.core.Post;
+import org.sopt.damain.api.service.PostService;
+import org.sopt.exception.BusinessException;
 
 import java.util.List;
 
@@ -25,5 +26,14 @@ public class PostController {
 
     public boolean deletePostById(int postId) {
         return postService.deletePostById(postId);
+    }
+
+    public boolean updatePostTitle(int id, String title) {
+        try {
+            postService.updatePostTitle(id, title);
+            return true;
+        } catch (BusinessException exception) {
+            return false;
+        }
     }
 }

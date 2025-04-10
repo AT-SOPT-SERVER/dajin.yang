@@ -1,4 +1,4 @@
-package org.sopt.damain;
+package org.sopt.damain.core;
 
 public class Post {
     private int id;
@@ -17,5 +17,7 @@ public class Post {
         return this.title;
     }
 
-
+    public void updateTitle(String title) {
+        this.title = title;
+    }
 }

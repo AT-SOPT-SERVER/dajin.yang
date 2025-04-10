@@ -1,6 +1,7 @@
-package org.sopt.repository;
+package org.sopt.damain.core.repository;
 
-import org.sopt.damain.Post;
+import org.sopt.damain.api.exception.NotFoundException;
+import org.sopt.damain.core.Post;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,5 +35,13 @@ public class PostRepository {
         }
         System.err.println("존재하지 않는 ID");
         return false;
+    }
+
+    public void updateTitle(int id, String title) {
+        Post post = findPostById(id);
+        if (post == null) {
+            throw new NotFoundException();
+        }
+        post.updateTitle(title);
     }
 }
