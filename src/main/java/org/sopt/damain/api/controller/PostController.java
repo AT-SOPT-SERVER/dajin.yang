@@ -37,4 +37,8 @@ public class PostController {
             return false;
         }
     }
+
+    public List<Post> searchPostsByKeyword(String keyword) {
+        return postService.searchPostsByKeyword(keyword);
+    }
 }
