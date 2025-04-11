@@ -46,7 +46,8 @@ public class PostService {
     }
 
     public void updatePostTitle(int id, String title) {
-        postRepository.updateTitle(id, title);
+        Post post = getPostById(id);
+        post.updateTitle(title);
     }
 
     public List<Post> searchPostsByKeyword(String keyword) {

@@ -42,14 +42,6 @@ public class PostRepository {
         return false;
     }
 
-    public void updateTitle(int id, String title) {
-        Post post = findPostById(id);
-        if (post == null) {
-            throw new NotFoundException();
-        }
-        post.updateTitle(title);
-    }
-
     public Optional<Post> createdAt() {
         if (postList.isEmpty()) {
             return Optional.empty();
