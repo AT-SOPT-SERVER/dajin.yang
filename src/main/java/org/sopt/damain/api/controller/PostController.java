@@ -27,13 +27,7 @@ public class PostController {
     }
 
     public boolean updatePostTitle(int id, String title) {
-        try {
-            postService.updatePostTitle(id, title);
-            return true;
-        } catch (BusinessException ex) {
-            GlobalExceptionHandler.handler(ex);
-            return false;
-        }
+        return postService.updatePostTitle(id, title);
     }
 
     public List<Post> searchPostsByKeyword(String keyword) {

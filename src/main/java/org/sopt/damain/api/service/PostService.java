@@ -52,9 +52,10 @@ public class PostService {
         return true;
     }
 
-    public void updatePostTitle(int id, String title) {
+    public boolean updatePostTitle(int id, String title) {
         Post post = getPostById(id);
         post.updateTitle(title);
+        return true;
     }
 
     public List<Post> searchPostsByKeyword(String keyword) {
