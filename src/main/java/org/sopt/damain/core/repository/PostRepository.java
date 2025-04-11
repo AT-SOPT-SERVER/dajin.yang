@@ -1,12 +1,7 @@
 package org.sopt.damain.core.repository;
 
-import org.sopt.damain.api.exception.NotFoundException;
 import org.sopt.damain.core.Post;
-import org.sopt.exception.BusinessException;
-import org.sopt.exception.ErrorCode;
 
-import java.io.BufferedWriter;
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

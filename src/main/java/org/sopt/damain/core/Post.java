@@ -43,7 +43,7 @@ public class Post {
             throw new TitleEmptyException();
         }
 
-        if (countVisibleChars(title) < 30) {
+        if (countVisibleChars(title) > 30) {
             throw new TitleLengthException();
         }
     }
