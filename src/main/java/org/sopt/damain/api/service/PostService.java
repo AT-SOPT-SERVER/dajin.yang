@@ -12,6 +12,7 @@ import java.util.List;
 
 import static org.sopt.common.utils.TitleValidate.duplicate;
 import static org.sopt.common.utils.IdGenerator.generateId;
+
 public class PostService {
     PostRepository postRepository =new PostRepository();
 
