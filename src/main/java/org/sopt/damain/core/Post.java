@@ -3,7 +3,11 @@ package org.sopt.damain.core;
 import org.sopt.damain.api.exception.TitleEmptyException;
 import org.sopt.damain.api.exception.TitleLengthException;
 
+import java.text.BreakIterator;
 import java.time.LocalDateTime;
+import java.util.Locale;
+
+import static com.sun.tools.javac.resources.CompilerProperties.Fragments.Local;
 
 public class Post {
     private int id;
@@ -16,7 +20,7 @@ public class Post {
             throw new TitleEmptyException();
         }
 
-        if (title.length() > 30) {
+        if (countVisibleChars(title) > 30) {
             throw new TitleLengthException();
         }
 
@@ -39,5 +43,17 @@ public class Post {
 
     public void updateTitle(String title) {
         this.title = title;
+    }
+
+    private int countVisibleChars(String text) {
+        BreakIterator breakIterator = BreakIterator.getCharacterInstance(Locale.ROOT);
+        breakIterator.setText(text);
+
+        int cnt = 0;
+        while (breakIterator.next() != BreakIterator.DONE) {
+            cnt++;
+        }
+
+        return cnt;
     }
 }
