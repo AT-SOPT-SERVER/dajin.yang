@@ -7,8 +7,6 @@ import java.text.BreakIterator;
 import java.time.LocalDateTime;
 import java.util.Locale;
 
-import static com.sun.tools.javac.resources.CompilerProperties.Fragments.Local;
-
 public class Post {
     private int id;
     private String title;
@@ -16,13 +14,7 @@ public class Post {
     private LocalDateTime createdAt;
 
     public Post(int id, String title) {
-        if (title == null || title.isBlank()) {
-            throw new TitleEmptyException();
-        }
-
-        if (countVisibleChars(title) > 30) {
-            throw new TitleLengthException();
-        }
+        validate(title);
 
         this.id = id;
         this.title = title;
@@ -42,7 +34,18 @@ public class Post {
     }
 
     public void updateTitle(String title) {
+        validate(title);
         this.title = title;
+    }
+
+    private void validate(String title) {
+        if (title == null || title.isBlank()) {
+            throw new TitleEmptyException();
+        }
+
+        if (countVisibleChars(title) < 30) {
+            throw new TitleLengthException();
+        }
     }
 
     private int countVisibleChars(String text) {
