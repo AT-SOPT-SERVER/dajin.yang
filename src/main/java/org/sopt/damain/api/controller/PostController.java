@@ -9,7 +9,6 @@ import java.util.List;
 
 public class PostController {
     private PostService postService = new PostService();
-    private int postId;
 
     public void createPost(String title) {
         postService.createPost(title);
@@ -28,9 +27,8 @@ public class PostController {
     }
 
     public boolean updatePostTitle(int id, String title) {
-        Post post = new Post(id, title);
         try {
-            postService.updatePostTitle(post);
+            postService.updatePostTitle(id, title);
             return true;
         } catch (BusinessException ex) {
             GlobalExceptionHandler.handler(ex);

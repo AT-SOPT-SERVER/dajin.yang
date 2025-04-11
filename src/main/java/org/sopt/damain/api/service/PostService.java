@@ -45,8 +45,8 @@ public class PostService {
         return postRepository.delete(id);
     }
 
-    public void updatePostTitle(Post post) {
-        postRepository.updateTitle(post.getId(), post.getTitle());
+    public void updatePostTitle(int id, String title) {
+        postRepository.updateTitle(id, title);
     }
 
     public List<Post> searchPostsByKeyword(String keyword) {

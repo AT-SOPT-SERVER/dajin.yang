@@ -67,17 +67,6 @@ public class PostRepository {
         return result;
     }
 
-    public void saveFile(String path) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
-            for (Post post : postList) {
-                writer.write(post.getId() + post.getTitle());
-                writer.newLine();
-            }
-        } catch (IOException ex) {
-            throw new BusinessException(ErrorCode.FILE_SAVE_ERROR);
-        }
-    }
-
     public void loadFile(List<Post> posts) {
         postList.clear();
         postList.addAll(posts);
