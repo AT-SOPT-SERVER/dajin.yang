@@ -1,6 +1,7 @@
 package org.sopt.damain.api.service;
 
 import org.sopt.common.FileManager;
+import org.sopt.damain.api.exception.NotFoundException;
 import org.sopt.damain.api.exception.TimeAttackException;
 import org.sopt.damain.core.Post;
 import org.sopt.damain.core.repository.PostRepository;
@@ -39,10 +40,16 @@ public class PostService {
     }
 
     public Post getPostById(int id) {
-        return postRepository.findPostById(id);
+        return postRepository.findPostById(id)
+                .orElseThrow(() -> new NotFoundException());
     }
+
     public boolean deletePostById(int id) {
-        return postRepository.delete(id);
+        boolean deleted = postRepository.delete(id);
+        if (!deleted) {
+            throw new NotFoundException();
+        }
+        return true;
     }
 
     public void updatePostTitle(int id, String title) {

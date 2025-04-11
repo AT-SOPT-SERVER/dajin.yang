@@ -17,24 +17,14 @@ public class PostRepository {
         return postList;
     }
 
-    public Post findPostById(int id) {
-        for (Post post : postList) {
-            if (post.getId() == id) {
-                return post;
-            }
-        }
-        System.err.println("존재하지 않는 ID");
-        return null;
+    public Optional<Post> findPostById(int id) {
+        return postList.stream()
+                .filter(post -> post.getId() == id)
+                .findFirst();
     }
+
     public boolean delete(int id) {
-        for (Post post : postList) {
-            if (post.getId() == id) {
-                postList.remove(postList.indexOf(post));
-                return true;
-            }
-        }
-        System.err.println("존재하지 않는 ID");
-        return false;
+        return postList.removeIf(post -> post.getId() == id);
     }
 
     public Optional<Post> createdAt() {
@@ -57,9 +47,5 @@ public class PostRepository {
     public void loadFile(List<Post> posts) {
         postList.clear();
         postList.addAll(posts);
-    }
-
-    public void setPost(List<Post> posts) {
-        this.postList = posts;
     }
 }

@@ -41,6 +41,5 @@ public class FileManager {
 
         return posts;
     }
-
 }
 
