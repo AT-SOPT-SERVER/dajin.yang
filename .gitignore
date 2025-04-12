@@ -6,7 +6,10 @@ build/
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
+.idea/uiDesigner.xml
 .idea/jarRepositories.xml
+.idea/gradle.xml
+.idea/vcs.xml
 .idea/compiler.xml
 .idea/libraries/
 *.iws
