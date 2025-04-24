@@ -3,6 +3,7 @@ package org.sopt.damain.api.service;
 import org.sopt.common.FileManager;
 import org.sopt.damain.api.exception.NotFoundException;
 import org.sopt.damain.api.exception.TimeAttackException;
+import org.sopt.damain.api.exception.TitleDuplicateException;
 import org.sopt.damain.core.Post;
 import org.sopt.damain.core.repository.PostRepository;
 import org.springframework.stereotype.Service;
@@ -11,12 +12,10 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.sopt.common.utils.TitleValidate.duplicate;
 import static org.sopt.common.utils.IdGenerator.generateId;
 
 @Service
 public class PostService {
-    // PostRepository postRepository =new PostRepository();
 
     private PostRepository postRepository;
 
@@ -80,5 +79,13 @@ public class PostService {
     public void loadFile() {
         List<Post> post = FileManager.loadFile();
         postRepository.loadFile(post);
+    }
+
+    private static void duplicate(String title, List<Post> postList) {
+        boolean isDuplicated = postList.stream()
+                .anyMatch(post -> post.getTitle().equals(title));
+        if (isDuplicated) {
+            throw new TitleDuplicateException();
+        }
     }
 }
