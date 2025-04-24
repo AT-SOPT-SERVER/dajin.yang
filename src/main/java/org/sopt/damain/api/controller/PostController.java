@@ -1,21 +1,33 @@
 package org.sopt.damain.api.controller;
 
-import org.sopt.damain.api.GlobalExceptionHandler;
 import org.sopt.damain.core.Post;
 import org.sopt.damain.api.service.PostService;
-import org.sopt.exception.BusinessException;
+import org.sopt.dto.PostRequest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@RestController
 public class PostController {
-    private PostService postService = new PostService();
 
-    public void createPost(String title) {
-        postService.createPost(title);
+    private PostService postService;
+
+    public PostController(PostService postService) {
+        this.postService = postService;
     }
 
-    public List<Post> getAllPosts() {
-        return postService.getAllPosts();
+    @PostMapping("/post")
+    public void createPost(@RequestBody final PostRequest postRequest) {
+        postService.createPost(postRequest.getTitle());
+    }
+
+    @GetMapping("/posts")
+    public ResponseEntity<?> getAllPosts() {
+        return ResponseEntity.ok(postService.getAllPosts());
     }
 
     public Post getPostById(int postId) {

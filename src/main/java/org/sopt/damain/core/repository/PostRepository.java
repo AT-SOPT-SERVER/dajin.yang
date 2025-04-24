@@ -1,11 +1,14 @@
 package org.sopt.damain.core.repository;
 
 import org.sopt.damain.core.Post;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
+@Repository
 public class PostRepository {
     List<Post> postList = new ArrayList<>();
 

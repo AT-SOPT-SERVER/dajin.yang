@@ -5,6 +5,7 @@ import org.sopt.damain.api.exception.NotFoundException;
 import org.sopt.damain.api.exception.TimeAttackException;
 import org.sopt.damain.core.Post;
 import org.sopt.damain.core.repository.PostRepository;
+import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -13,8 +14,15 @@ import java.util.List;
 import static org.sopt.common.utils.TitleValidate.duplicate;
 import static org.sopt.common.utils.IdGenerator.generateId;
 
+@Service
 public class PostService {
-    PostRepository postRepository =new PostRepository();
+    // PostRepository postRepository =new PostRepository();
+
+    private PostRepository postRepository;
+
+    public PostService(PostRepository postRepository) {
+        this.postRepository = postRepository;
+    }
 
     public PostService() {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -34,6 +42,8 @@ public class PostService {
 
         Post post = new Post(generateId(), title);
         postRepository.save(post);
+
+        System.out.println(post.getTitle());
     }
 
     public List<Post> getAllPosts() {
