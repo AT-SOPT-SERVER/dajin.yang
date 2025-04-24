@@ -1,18 +1,24 @@
 package org.sopt.damain.api.service;
 
-import org.sopt.common.FileManager;
+import org.aspectj.weaver.ast.Not;
+import org.sopt.damain.api.exception.BaboEmptyException;
 import org.sopt.damain.api.exception.NotFoundException;
 import org.sopt.damain.api.exception.TimeAttackException;
 import org.sopt.damain.api.exception.TitleDuplicateException;
 import org.sopt.damain.core.Post;
 import org.sopt.damain.core.repository.PostRepository;
+import org.sopt.dto.PostListResponse;
+import org.sopt.dto.PostRequest;
+import org.sopt.dto.PostResponse;
+import org.sopt.dto.PostUpdateRequest;
+import org.sopt.exception.BusinessException;
+import org.sopt.exception.ErrorCode;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static org.sopt.common.utils.IdGenerator.generateId;
 
 @Service
 public class PostService {
@@ -23,69 +29,71 @@ public class PostService {
         this.postRepository = postRepository;
     }
 
-    public PostService() {
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            saveFile();
-        }));
+    @Transactional
+    public void createPost(PostRequest postRequest) {
+        validateDuplicateTitle(postRequest.title());
+        validateTimeRestriction(postRepository.findTopByOrderByCreatedAtDesc());
+
+        Post post = new Post(postRequest.title());
+
+        postRepository.save(post);
     }
 
-    public void createPost(String title) {
-        duplicate(title, postRepository.findAll());
+    public PostResponse getPostById(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException());
 
-        postRepository.createdAt().ifPresent(lastPost->{
-            Duration diff = Duration.between(lastPost.getCreatedAt(), LocalDateTime.now());
-            if (diff.getSeconds() < 180) {
+        return new PostResponse(post.getId(), post.getTitle());
+    }
+
+    @Transactional
+    public void updatePostTitle(Long id, PostUpdateRequest postUpdateRequest) {
+        validateDuplicateTitle(postUpdateRequest.title());
+
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException());
+
+        post.updateTitle(postUpdateRequest.title());
+    }
+
+    @Transactional
+    public void deletePostById(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException());
+
+        postRepository.delete(post);
+
+    }
+
+    public List<PostResponse> getAllPosts() {
+        return postRepository.findAll().stream()
+                .map(post -> new PostResponse(post.getId(), post.getTitle()))
+                .toList();
+    }
+
+    public PostResponse searchPostsByKeyword(String keyword) {
+        if (keyword==null||keyword.trim().isEmpty()) {
+            throw new BaboEmptyException();
+        }
+
+        Post post = postRepository.findFirstByTitleContainingIgnoreCase(keyword)
+                .orElseThrow(() -> new NotFoundException());
+        return new PostResponse(post.getId(), post.getTitle());
+    }
+
+    private void validateDuplicateTitle(String title) {
+        if (postRepository.existsByTitle(title)) {
+            throw new TitleDuplicateException();
+
+        }
+    }
+
+    private void validateTimeRestriction(java.util.Optional<Post> lastPost) {
+        lastPost.ifPresent(post -> {
+            Duration diff = Duration.between(post.getCreatedAt(), LocalDateTime.now());
+            if (diff.getSeconds() < 1) {
                 throw new TimeAttackException();
             }
         });
-
-        Post post = new Post(generateId(), title);
-        postRepository.save(post);
-
-        System.out.println(post.getTitle());
-    }
-
-    public List<Post> getAllPosts() {
-        return postRepository.findAll();
-    }
-
-    public Post getPostById(int id) {
-        return postRepository.findPostById(id)
-                .orElseThrow(() -> new NotFoundException());
-    }
-
-    public boolean deletePostById(int id) {
-        boolean deleted = postRepository.delete(id);
-        if (!deleted) {
-            throw new NotFoundException();
-        }
-        return true;
-    }
-
-    public boolean updatePostTitle(int id, String title) {
-        Post post = getPostById(id);
-        post.updateTitle(title);
-        return true;
-    }
-
-    public List<Post> searchPostsByKeyword(String keyword) {
-        return postRepository.searchByKeword(keyword);
-    }
-
-    public void saveFile() {
-        FileManager.saveFile(postRepository.findAll());
-    }
-
-    public void loadFile() {
-        List<Post> post = FileManager.loadFile();
-        postRepository.loadFile(post);
-    }
-
-    private static void duplicate(String title, List<Post> postList) {
-        boolean isDuplicated = postList.stream()
-                .anyMatch(post -> post.getTitle().equals(title));
-        if (isDuplicated) {
-            throw new TitleDuplicateException();
-        }
     }
 }
