@@ -1,12 +1,9 @@
 package org.sopt.damain.api.controller;
 
-import org.sopt.damain.core.Post;
 import org.sopt.damain.api.service.PostService;
 import org.sopt.dto.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 public class PostController {

@@ -1,6 +1,5 @@
 package org.sopt.damain.api.service;
 
-import org.aspectj.weaver.ast.Not;
 import org.sopt.damain.api.exception.BaboEmptyException;
 import org.sopt.damain.api.exception.NotFoundException;
 import org.sopt.damain.api.exception.TimeAttackException;
@@ -11,8 +10,6 @@ import org.sopt.dto.PostListResponse;
 import org.sopt.dto.PostRequest;
 import org.sopt.dto.PostResponse;
 import org.sopt.dto.PostUpdateRequest;
-import org.sopt.exception.BusinessException;
-import org.sopt.exception.ErrorCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
