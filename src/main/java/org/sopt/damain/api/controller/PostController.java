@@ -43,9 +43,9 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<Response<List<PostResponse>>> getAllPosts() {
-        List<PostResponse> posts = postService.getAllPosts();
-        return ResponseEntity.ok(Response.success(posts));
+    public ResponseEntity<Response<PostListResponse>> getAllPosts() {
+        PostListResponse postListResponse = postService.getAllPosts();
+        return ResponseEntity.ok(Response.success(postListResponse));
     }
 
     @GetMapping("/posts/search")

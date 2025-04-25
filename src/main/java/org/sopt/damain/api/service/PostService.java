@@ -65,10 +65,11 @@ public class PostService {
 
     }
 
-    public List<PostResponse> getAllPosts() {
-        return postRepository.findAll().stream()
+    public PostListResponse getAllPosts() {
+        List<PostResponse> posts = postRepository.findAll().stream()
                 .map(post -> new PostResponse(post.getId(), post.getTitle()))
                 .toList();
+        return new PostListResponse(posts);
     }
 
     public PostResponse searchPostsByKeyword(String keyword) {
@@ -91,7 +92,7 @@ public class PostService {
     private void validateTimeRestriction(java.util.Optional<Post> lastPost) {
         lastPost.ifPresent(post -> {
             Duration diff = Duration.between(post.getCreatedAt(), LocalDateTime.now());
-            if (diff.getSeconds() < 1) {
+            if (diff.getSeconds() < 180) {
                 throw new TimeAttackException();
             }
         });
