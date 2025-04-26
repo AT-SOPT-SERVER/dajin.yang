@@ -1,44 +1,53 @@
 package org.sopt.damain.api.controller;
 
-import org.sopt.damain.api.GlobalExceptionHandler;
-import org.sopt.damain.core.Post;
 import org.sopt.damain.api.service.PostService;
-import org.sopt.exception.BusinessException;
+import org.sopt.dto.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+@RestController
 public class PostController {
-    private PostService postService = new PostService();
 
-    public void createPost(String title) {
-        postService.createPost(title);
+    private final PostService postService;
+
+    public PostController(PostService postService) {
+        this.postService = postService;
     }
 
-    public List<Post> getAllPosts() {
-        return postService.getAllPosts();
+    @PostMapping("/posts")
+    public ResponseEntity<Response<Void>> createPost(@RequestBody PostRequest postRequest
+    ) {
+        postService.createPost(postRequest);
+        return ResponseEntity.ok(Response.success(null));
     }
 
-    public Post getPostById(int postId) {
-        return postService.getPostById(postId);
+    @GetMapping("/posts/{id}")
+    public ResponseEntity<Response<PostResponse>> getPostById(@PathVariable Long id) {
+        PostResponse postResponse = postService.getPostById(id);
+        return ResponseEntity.ok(Response.success(postResponse));
     }
 
-    public boolean deletePostById(int postId) {
-        return postService.deletePostById(postId);
+    @PutMapping("/posts/{id}")
+    public ResponseEntity<Response<Void>> updatePostTitle(@PathVariable Long id, @RequestBody PostUpdateRequest postUpdateRequest) {
+        postService.updatePostTitle(id, postUpdateRequest);
+        return ResponseEntity.ok(Response.success(null));
     }
 
-    public boolean updatePostTitle(int id, String title) {
-        return postService.updatePostTitle(id, title);
+    @DeleteMapping("posts/{id}")
+    public ResponseEntity<Response<Void>> deletePostById(@PathVariable Long id) {
+        postService.deletePostById(id);
+        return ResponseEntity.ok(Response.success(null));
     }
 
-    public List<Post> searchPostsByKeyword(String keyword) {
-        return postService.searchPostsByKeyword(keyword);
+    @GetMapping("/posts")
+    public ResponseEntity<Response<PostListResponse>> getAllPosts() {
+        PostListResponse postListResponse = postService.getAllPosts();
+        return ResponseEntity.ok(Response.success(postListResponse));
     }
 
-    public void saveFile() {
-        postService.saveFile();
-    }
-
-    public void loadFile() {
-        postService.loadFile();
+    @GetMapping("/posts/search")
+    public ResponseEntity<Response<PostResponse>> searchPostsByKeyword(@RequestParam String keyword) {
+        PostResponse postResponse = postService.searchPostsByKeyword(keyword);
+        return ResponseEntity.ok(Response.success(postResponse));
     }
 }
