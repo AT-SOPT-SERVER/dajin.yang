@@ -1,7 +1,7 @@
 package org.sopt.common.validator;
 
-import org.sopt.damain.api.exception.TitleEmptyException;
-import org.sopt.damain.api.exception.TitleLengthException;
+import org.sopt.domain.api.exception.TitleEmptyException;
+import org.sopt.domain.api.exception.TitleLengthException;
 
 public class TitleValidator {
 

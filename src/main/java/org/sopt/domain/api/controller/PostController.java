@@ -1,6 +1,6 @@
-package org.sopt.damain.api.controller;
+package org.sopt.domain.api.controller;
 
-import org.sopt.damain.api.service.PostService;
+import org.sopt.domain.api.service.PostService;
 import org.sopt.dto.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

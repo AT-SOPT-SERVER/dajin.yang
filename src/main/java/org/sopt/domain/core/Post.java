@@ -1,4 +1,4 @@
-package org.sopt.damain.core;
+package org.sopt.domain.core;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

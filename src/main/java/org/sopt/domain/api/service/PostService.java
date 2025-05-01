@@ -1,11 +1,11 @@
-package org.sopt.damain.api.service;
+package org.sopt.domain.api.service;
 
-import org.sopt.damain.api.exception.BaboEmptyException;
-import org.sopt.damain.api.exception.NotFoundException;
-import org.sopt.damain.api.exception.TimeAttackException;
-import org.sopt.damain.api.exception.TitleDuplicateException;
-import org.sopt.damain.core.Post;
-import org.sopt.damain.core.repository.PostRepository;
+import org.sopt.domain.api.exception.BaboEmptyException;
+import org.sopt.domain.api.exception.NotFoundException;
+import org.sopt.domain.api.exception.TimeAttackException;
+import org.sopt.domain.api.exception.TitleDuplicateException;
+import org.sopt.domain.core.Post;
+import org.sopt.domain.core.repository.PostRepository;
 import org.sopt.dto.PostListResponse;
 import org.sopt.dto.PostRequest;
 import org.sopt.dto.PostResponse;

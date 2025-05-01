@@ -1,4 +1,4 @@
-package org.sopt.damain.api;
+package org.sopt.domain.api;
 
 import org.sopt.dto.Response;
 import org.sopt.exception.BusinessException;

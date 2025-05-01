@@ -1,6 +1,6 @@
-package org.sopt.damain.core.repository;
+package org.sopt.domain.core.repository;
 
-import org.sopt.damain.core.Post;
+import org.sopt.domain.core.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
