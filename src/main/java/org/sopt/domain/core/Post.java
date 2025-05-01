@@ -1,14 +1,14 @@
 package org.sopt.domain.core;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.sopt.common.validator.TitleValidator;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Post {
 
     @Id
@@ -17,6 +17,7 @@ public class Post {
 
     private String title;
 
+    @CreatedDate
     private LocalDateTime createdAt;
 
     protected Post() {
