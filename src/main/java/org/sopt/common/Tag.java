@@ -10,7 +10,7 @@ public enum Tag {
 
     public static Tag fromString(String tag) {
         try {
-            return Tag.valueOf(tag.toUpperCase());
+            return Tag.valueOf(tag.trim().toUpperCase());
         } catch (IllegalArgumentException ex) {
             throw new BusinessException(ErrorCode.MISSING_PATH_VARIABLE);
         }

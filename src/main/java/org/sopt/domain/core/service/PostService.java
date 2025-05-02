@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostService {
@@ -54,15 +55,11 @@ public class PostService {
     @Transactional
     public PostTitleReq updatePostTitle(Long userId, Long postId, PostTitleReq postTitleReq) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST));
+                .filter(p -> p.getMemberId().equals(userId))
+                .orElseThrow(() -> new BusinessException(ErrorCode.FORBIDDEN_USER));
 
-        if (!post.getMemberId().equals(userId)) {
-            throw new BusinessException(ErrorCode.FORBIDDEN_USER);
-        }
-
-        if (postTitleReq.title() != null) {
-            post.updateTitle(postTitleReq.title());
-        }
+        Optional.ofNullable(postTitleReq.title())
+                .ifPresent(post::updateTitle);
 
         return new PostTitleReq(post.getTitle());
     }
@@ -70,15 +67,11 @@ public class PostService {
     @Transactional
     public PostContentReq updatePostContent(Long userId, Long postId, PostContentReq postContentReq) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST));
+                .filter(p -> p.getMemberId().equals(userId))
+                .orElseThrow(() -> new BusinessException(ErrorCode.FORBIDDEN_USER));
 
-        if (!post.getMemberId().equals(userId)) {
-            throw new BusinessException(ErrorCode.FORBIDDEN_USER);
-        }
-
-        if (postContentReq.content() != null) {
-            post.updateContent(postContentReq.content());
-        }
+        Optional.ofNullable(postContentReq.content())
+                .ifPresent(post::updateContent);
 
         return new PostContentReq(post.getTitle());
     }
@@ -86,11 +79,8 @@ public class PostService {
     @Transactional
     public void deletePostById(Long userId, Long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST));
-
-        if (!post.getMemberId().equals(userId)) {
-            throw new BusinessException(ErrorCode.FORBIDDEN_USER);
-        }
+                .filter(p -> p.getMemberId().equals(userId))
+                .orElseThrow(() -> new BusinessException(ErrorCode.FORBIDDEN_USER));
 
         postRepository.delete(post);
     }
@@ -99,12 +89,10 @@ public class PostService {
         List<PostTitleRes> result = postQueryRepository.searchByTitleOrNickname(title, nickname);
 
         if (result.isEmpty()) {
-            if (title != null) {
-                throw new BusinessException(ErrorCode.NOT_FOUND_POST);
-            }
-            if (nickname != null) {
-                throw new BusinessException(ErrorCode.NOT_FOUND_USER);
-            }
+            Optional.ofNullable(title)
+                    .ifPresent(t -> { throw new BusinessException(ErrorCode.NOT_FOUND_POST); });
+            Optional.ofNullable(nickname)
+                    .ifPresent(n -> { throw new BusinessException(ErrorCode.NOT_FOUND_USER); });
         }
 
         return new PostTitleListRes(result);
