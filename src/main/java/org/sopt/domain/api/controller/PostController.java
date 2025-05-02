@@ -78,9 +78,4 @@ public class PostController {
         PostTitleListRes postTitleListRes = postService.searchTitleAndNickname(title, nickname);
         return ResponseEntity.ok(Response.success(postTitleListRes));
     }
-
-/*    @PatchMapping("/posts/tag")
-    public ResponseEntity<Response<TagReq>> updateTag() {
-
-    }*/
 }
