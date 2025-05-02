@@ -41,12 +41,13 @@ public class Post {
 
     }
 
-    public Post(String title, String content, Long memberId) {
+    public Post(String title, String content, Long memberId, Tag tag) {
         TitleValidator.validateTitle(title);
         ContentValidator.validateContent(content);
         this.title = title;
         this.content = content;
         this.memberId = memberId;
+        this.tag = tag;
     }
 
     public void updateTitle(String title) {

@@ -35,16 +35,16 @@ public class PostService {
         }
 
         Tag convertedTag;
-
         try {
             convertedTag = Tag.valueOf(tag.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_POST);
+            throw new BusinessException(ErrorCode.MISSING_PATH_VARIABLE);
         }
 
-        Post post = new Post(postReq.title(), postReq.content(), memberId);
+        Post post = new Post(postReq.title(), postReq.content(), memberId, convertedTag);
         postRepository.save(post);
     }
+
 
     public PostTitleListRes getAllPostTitle () {
         List<PostTitleRes> postTitleRes = postRepository.findAllPostTitlesWithNickname();
