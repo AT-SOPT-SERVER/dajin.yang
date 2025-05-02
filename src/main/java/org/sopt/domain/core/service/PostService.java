@@ -1,10 +1,6 @@
 package org.sopt.domain.core.service;
 
 import org.sopt.common.Tag;
-import org.sopt.domain.api.exception.ForbiddenUserException;
-import org.sopt.domain.api.exception.NotFoundPostException;
-import org.sopt.domain.api.exception.NotFoundUserException;
-import org.sopt.domain.api.exception.TitleDuplicateException;
 import org.sopt.domain.core.Post;
 import org.sopt.domain.core.repository.PostQueryRepository;
 import org.sopt.domain.core.repository.PostRepository;
@@ -14,6 +10,8 @@ import org.sopt.dto.req.PostTitleReq;
 import org.sopt.dto.res.PostDetailsRes;
 import org.sopt.dto.res.PostTitleListRes;
 import org.sopt.dto.res.PostTitleRes;
+import org.sopt.exception.BusinessException;
+import org.sopt.exception.ErrorCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +31,7 @@ public class PostService {
     @Transactional
     public void createPost(PostReq postReq, String tag, Long memberId) {
         if (postRepository.existsByTitle(postReq.title())) {
-            throw new TitleDuplicateException();
+            throw new BusinessException(ErrorCode.TITLE_DUPLICATE);
         }
 
         Tag convertedTag;
@@ -41,7 +39,7 @@ public class PostService {
         try {
             convertedTag = Tag.valueOf(tag.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new NotFoundPostException();
+            throw new BusinessException(ErrorCode.NOT_FOUND_POST);
         }
 
         Post post = new Post(postReq.title(), postReq.content(), memberId);
@@ -56,16 +54,16 @@ public class PostService {
 
     public PostDetailsRes getDetailsPost(Long postId) {
         return postRepository.findPostDetailsById(postId)
-                .orElseThrow(() -> new NotFoundPostException());
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST));
     }
 
     @Transactional
     public PostTitleReq updatePostTitle(Long userId, Long postId, PostTitleReq postTitleReq) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new NotFoundPostException());
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST));
 
         if (!post.getMemberId().equals(userId)) {
-            throw new ForbiddenUserException();
+            throw new BusinessException(ErrorCode.FORBIDDEN_USER);
         }
 
         if (postTitleReq.title() != null) {
@@ -78,10 +76,10 @@ public class PostService {
     @Transactional
     public PostContentReq updatePostContent(Long userId, Long postId, PostContentReq postContentReq) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new NotFoundPostException());
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST));
 
         if (!post.getMemberId().equals(userId)) {
-            throw new ForbiddenUserException();
+            throw new BusinessException(ErrorCode.FORBIDDEN_USER);
         }
 
         if (postContentReq.content() != null) {
@@ -94,10 +92,10 @@ public class PostService {
     @Transactional
     public void deletePostById(Long userId, Long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new NotFoundPostException());
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST));
 
         if (!post.getMemberId().equals(userId)) {
-            throw new ForbiddenUserException();
+            throw new BusinessException(ErrorCode.FORBIDDEN_USER);
         }
 
         postRepository.delete(post);
@@ -108,10 +106,10 @@ public class PostService {
 
         if (result.isEmpty()) {
             if (title != null) {
-                throw new NotFoundPostException();
+                throw new BusinessException(ErrorCode.NOT_FOUND_POST);
             }
             if (nickname != null) {
-                throw new NotFoundUserException();
+                throw new BusinessException(ErrorCode.NOT_FOUND_USER);
             }
         }
 

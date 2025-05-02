@@ -1,17 +1,17 @@
 package org.sopt.common.validator;
 
-import org.sopt.domain.api.exception.TitleEmptyException;
-import org.sopt.domain.api.exception.TitleLengthException;
+import org.sopt.exception.BusinessException;
+import org.sopt.exception.ErrorCode;
 
 public class TitleValidator {
 
     public static void validateTitle(String title) {
         if (title == null || title.isBlank()) {
-            throw new TitleEmptyException();
+            throw new BusinessException(ErrorCode.TITLE_EMPTY);
         }
 
         if (countVisibleCharacters(title) > 30) {
-            throw new TitleLengthException();
+            throw new BusinessException(ErrorCode.TITLE_LENGTH);
         }
     }
 

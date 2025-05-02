@@ -2,10 +2,11 @@ package org.sopt.domain.core.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.sopt.domain.api.exception.MissingPathVariableException;
 import org.sopt.domain.core.QMember;
 import org.sopt.domain.core.QPost;
 import org.sopt.dto.res.PostTitleRes;
+import org.sopt.exception.BusinessException;
+import org.sopt.exception.ErrorCode;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -41,6 +42,6 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                     .fetch();
         }
 
-        throw  new MissingPathVariableException();
+        throw  new BusinessException(ErrorCode.MISSING_PATH_VARIABLE);
     }
 }

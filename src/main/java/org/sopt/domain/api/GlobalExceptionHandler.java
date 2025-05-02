@@ -1,5 +1,6 @@
 package org.sopt.domain.api;
 
+import org.sopt.dto.ErrorResponse;
 import org.sopt.dto.Response;
 import org.sopt.exception.BusinessException;
 import org.sopt.exception.ErrorCode;
@@ -17,10 +18,10 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<Response<Void>> handlerBusinessException(BusinessException ex) {
+    public ResponseEntity<ErrorResponse> handlerBusinessException(BusinessException ex) {
         ErrorCode errorCode = ex.getErrorCode();
-        Response<Void> response = Response.fail(errorCode.getCode(), errorCode.getMsg());
-        return ResponseEntity.status(errorCode.getStatus()).body(response);
+        return ResponseEntity.status(errorCode.getStatus())
+                .body(new ErrorResponse(errorCode.getCode(), errorCode.getMsg()));
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
